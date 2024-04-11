@@ -1,2 +1,1 @@
 # AROOO
-AROOO_TEST
