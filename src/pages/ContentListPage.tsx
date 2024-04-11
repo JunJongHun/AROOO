@@ -9,8 +9,11 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { FaHeart } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 function ContentListPage() {
+  const navigate = useNavigate();
+
   const [contentList, setContentList] = useState([
     { id: 2, title: 'another title', likes: 5 },
     { id: 3, title: 'more titles', likes: 10 },
@@ -27,11 +30,20 @@ function ContentListPage() {
     { id: 14, title: 'even more different titles', likes: 0 },
   ]);
 
+  const handleMoveToDetail = (id: number) => {
+    navigate(`/content/${id}`);
+  };
+
   return (
     <Box flex={1}>
       <List>
         {contentList?.map((content) => (
-          <ListItem background={'white'} padding={3}>
+          <ListItem
+            background={'white'}
+            padding={3}
+            onClick={() => handleMoveToDetail(1)}
+            _hover={{ cursor: 'pointer', background: 'gray.50' }}
+          >
             <Text fontWeight={600} fontSize={'large'}>
               {content.title}
             </Text>
