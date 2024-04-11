@@ -11,6 +11,13 @@ function ContentDetailPage() {
       '<div class="blog-post">        <p>This is an engaging and informative post related to <em>another title</em>. It has been well-received, garnering <strong>5</strong> likes from our readers. Stay tuned for more insights and updates on this topic.</p>\n    </div>\n\n    <div class="blog-post">\n        <h2>another title</h2>\n        <p>This is an engaging and informative post related to <em>another title</em>. It has been well-received, garnering <strong>5</strong> likes from our readers. Stay tuned for more insights and updates on this topic.</p>\n    </div>\n \n    <div class="blog-post">\n        <h2>another title</h2>\n        <p>This is an engaging and informative post related to <em>another title</em>. It has been well-received, garnering <strong>5</strong> likes from our readers. Stay tuned for more insights and updates on this topic.</p>\n    </div>\n \n    <div class="blog-post">\n        <h2>another title</h2>\n        <p>This is an engaging and informative post related to <em>another title</em>. It has been well-received, garnering <strong>5</strong> likes from our readers. Stay tuned for more insights and updates on this topic.</p>\n    </div>\n \n    <div class="blog-post">\n        <h2>another title</h2>\n        <p>This is an engaging and informative post related to <em>another title</em>. It has been well-received, garnering <strong>5</strong> likes from our readers. Stay tuned for more insights and updates on this topic.</p>\n    </div>\n \n    <div class="blog-post">\n        <h2>another title</h2>\n        <p>This is an engaging and informative post related to <em>another title</em>. It has been well-received, garnering <strong>5</strong> likes from our readers. Stay tuned for more insights and updates on this topic.</p>\n    </div>\n \n    <div class="blog-post">\n        <h2>another title</h2>\n        <p>This is an engaging and informative post related to <em>another title</em>. It has been well-received, garnering <strong>5</strong> likes from our readers. Stay tuned for more insights and updates on this topic.</p>\n    </div>\n \n     ',
   });
 
+  const handleLikeUp = () => {
+    setContentDetail((prev) => ({
+      ...prev,
+      likes: prev.likes + 1,
+    }));
+  };
+
   return (
     <Flex h={'100%'} flexDirection={'column'}>
       <Box>
@@ -31,7 +38,13 @@ function ContentDetailPage() {
         justifyContent={'center'}
         alignItems={'center'}
       >
-        <Icon w={6} h={6} as={FiHeart} />
+        <Icon
+          w={6}
+          h={6}
+          as={FiHeart}
+          onClick={handleLikeUp}
+          _hover={{ cursor: 'pointer' }}
+        />
         <Text fontSize={24}>{contentDetail?.likes}</Text>
       </Flex>
     </Flex>
