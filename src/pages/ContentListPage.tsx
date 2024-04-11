@@ -8,7 +8,7 @@ import {
   ListItem,
   Text,
 } from '@chakra-ui/react';
-import { TiHeartFullOutline } from 'react-icons/ti';
+import { FaHeart } from 'react-icons/fa';
 
 function ContentListPage() {
   const [contentList, setContentList] = useState([
@@ -29,14 +29,14 @@ function ContentListPage() {
 
   return (
     <Box flex={1}>
-      <List spacing={3}>
+      <List>
         {contentList?.map((content) => (
-          <ListItem background={'white'} padding={4}>
+          <ListItem background={'white'} padding={3}>
             <Text fontWeight={600} fontSize={'large'}>
               {content.title}
             </Text>
             <Flex alignItems={'center'}>
-              <ListIcon as={TiHeartFullOutline} color="black" />
+              <ListIcon as={FaHeart} color="black" />
               <Text>{content.likes}</Text>
             </Flex>
           </ListItem>

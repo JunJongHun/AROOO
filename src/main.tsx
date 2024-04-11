@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './router.tsx';
 import { worker } from './mocks/browsers.ts';
 import { ChakraProvider } from '@chakra-ui/react';
+// import './styles/index.css';
 
 if (import.meta.env.DEV) {
   await worker.start();
