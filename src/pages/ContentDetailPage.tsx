@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Divider, Flex, Icon, Spinner, Text } from '@chakra-ui/react';
+import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import { FiHeart } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import useDataFetching from '../hooks/useDataFetching';
@@ -10,11 +10,7 @@ import { postContentLikeUp } from '../apis/apis';
 function ContentDetailPage() {
   const { contentId } = useParams<{ contentId: string }>();
 
-  const {
-    isLoading,
-    isError,
-    res: contentDetail,
-  } = useDataFetching<ContentDetail>(
+  const { isError, res: contentDetail } = useDataFetching<ContentDetail>(
     `${BASE_API_URL}/library/content/${contentId}`
   );
   const [likes, setLikes] = useState<number>(0);
@@ -40,25 +36,14 @@ function ContentDetailPage() {
     );
   }
 
-  if (isLoading) {
-    return (
-      <Flex h={'100%'} justify={'center'} align={'center'}>
-        <Spinner />
-      </Flex>
-    );
-  }
-
   return (
     <Flex h={'100%'} flexDirection={'column'}>
       <Box>
         <Text fontSize={32}>{contentDetail?.title}</Text>
       </Box>
       <Box flex={1}>
-        <Text
-          dangerouslySetInnerHTML={{ __html: contentDetail?.content || '' }}
-        ></Text>
+        <Text>{contentDetail?.content}</Text>
       </Box>
-      <Divider marginY={4} />
       <Flex
         position={'sticky'}
         bottom={0}

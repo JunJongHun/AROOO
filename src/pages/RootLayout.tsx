@@ -1,20 +1,18 @@
-import { Divider, Flex } from '@chakra-ui/react';
+import { Box, Divider, VStack } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import Header from '../components/Header';
 
 function RootLayout() {
   return (
-    <Flex
-      maxW={440}
-      minW={375}
-      h={'100vh'}
-      marginX={'auto'}
-      flexDirection={'column'}
-    >
-      <Header />
-      <Divider marginY={4} />
-      <Outlet />
-    </Flex>
+    <VStack maxW={440} minW={375} h={'100vh'} marginX={'auto'}>
+      <Box w={'100%'} padding={2}>
+        <Header />
+      </Box>
+      <Divider />
+      <Box w={'100%'} padding={2}>
+        <Outlet />
+      </Box>
+    </VStack>
   );
 }
 

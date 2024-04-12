@@ -1,16 +1,8 @@
-import {
-  Box,
-  Divider,
-  Flex,
-  List,
-  ListIcon,
-  ListItem,
-  Text,
-} from '@chakra-ui/react';
-import { FaHeart } from 'react-icons/fa';
+import { Box, Divider, Text, VStack } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import useInfiniteScroll from '../hooks/useInfiniteScroll';
 import useContentList from '../hooks/useContentList';
+import ContentList from '../components/ContentList';
 
 function ContentListPage() {
   const navigate = useNavigate();
@@ -34,28 +26,13 @@ function ContentListPage() {
   }
 
   return (
-    <Flex h={'100%'} direction={'column'}>
-      <List flex={1}>
-        {contentList?.map((content) => (
-          <ListItem
-            key={content?.id}
-            background={'white'}
-            padding={3}
-            onClick={() => handleMoveToDetail(content?.id)}
-            _hover={{ cursor: 'pointer', background: 'gray.50' }}
-          >
-            <Text fontWeight={600} fontSize={'large'}>
-              {content?.title}
-            </Text>
-            <Flex alignItems={'center'}>
-              <ListIcon as={FaHeart} color="black" />
-              <Text>{content?.likes}</Text>
-            </Flex>
-          </ListItem>
-        ))}
-      </List>
+    <VStack>
+      <ContentList
+        contentList={contentList}
+        handleMoveToDetail={handleMoveToDetail}
+      />
       {hasNext && !isLoading && <Divider marginY={4} ref={observerRef} />}
-    </Flex>
+    </VStack>
   );
 }
 

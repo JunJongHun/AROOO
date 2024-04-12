@@ -3,13 +3,8 @@ import aroooPng from '../assets/arooo.png';
 
 function Header() {
   return (
-    <Flex color="white" alignItems={'center'} justifyContent={'space-between'}>
-      <Image
-        boxSize="70px"
-        objectFit="cover"
-        src={aroooPng}
-        alt="arooo photo"
-      />
+    <Flex alignItems={'center'} justifyContent={'space-between'}>
+      <Image boxSize={70} objectFit="cover" src={aroooPng} alt="arooo photo" />
       <Text fontSize="xxx-large" color="black" fontWeight={400}>
         AROOO
       </Text>
