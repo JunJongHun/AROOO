@@ -36,7 +36,7 @@ const useDataFetching = <T,>(
     };
 
     fetchData();
-  }, [url, data, method]);
+  }, [url, method]);
 
   return { isLoading, res, isError };
 };
