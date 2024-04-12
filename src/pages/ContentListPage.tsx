@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import {
   Box,
   Divider,
@@ -11,35 +10,23 @@ import {
 } from '@chakra-ui/react';
 import { FaHeart } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { getContentList } from '../apis/apis';
 import { Content } from '../types';
+import useDataFetching from '../hooks/useDataFetching';
+import { BASE_API_URL } from '../apis/constants';
 
 function ContentListPage() {
   const navigate = useNavigate();
-
-  const [contentList, setContentList] = useState<Array<Content>>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const {
+    isLoading,
+    isError,
+    res: contentList,
+  } = useDataFetching<Content[]>(`${BASE_API_URL}/library/content`);
 
   const handleMoveToDetail = (id: string) => {
     navigate(`/content/${id}`);
   };
 
-  useEffect(() => {
-    setIsLoading(true);
-    getContentList({ skip: 0, limit: 10 })
-      .then((data) => {
-        setContentList(data);
-      })
-      .catch((error) => {
-        setError(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
-
-  if (error) {
+  if (isError) {
     return (
       <Box>
         <Text>Error</Text>
