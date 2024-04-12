@@ -9,69 +9,21 @@ import {
 } from '@chakra-ui/react';
 import { FaHeart } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { Content } from '../types';
-import useDataFetching from '../hooks/useDataFetching';
-import { BASE_API_URL } from '../apis/constants';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import axios, { AxiosError } from 'axios';
+import useInfiniteScroll from '../hooks/useInfiniteScroll';
+import useContentList from '../hooks/useContentList';
 
 function ContentListPage() {
-  const ref = useRef(null);
   const navigate = useNavigate();
-  // const {
-  //   isLoading,
-  //   isError,
-  //   res: contentList,
-  // } = useDataFetching<Content[]>(`${BASE_API_URL}/library/content`);
-  const [isLoading, setIsLoading] = useState(false);
-  const [contentList, setContentList] = useState<Content[]>([]);
-  const [isError, setIsError] = useState<AxiosError | null>(null);
-  const [skip, setSkip] = useState(0);
-  const [limit] = useState(10);
+  const { contentList, isLoading, isError, fetchContentList, hasNext } =
+    useContentList();
 
-  const fetchContentList = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const response = await axios.get<Content[]>(
-        `${BASE_API_URL}/library/content?skip=${skip}&limit=${limit}`
-      );
-
-      if (response.data.length === 0) {
-        console.log('no more data');
-        ref.current = null;
-        return;
-      }
-
-      setContentList((pre) => [...pre, ...response.data]);
-      setSkip(skip + limit);
-    } catch (error) {
-      setIsError(error as AxiosError);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [skip, contentList]);
-
-  const callback = useCallback(
-    (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && !isLoading) {
-          fetchContentList();
-        }
-      });
-    },
-    [fetchContentList, isLoading]
-  );
+  const observerRef = useInfiniteScroll(fetchContentList, {
+    rootMargin: '200px',
+  });
 
   const handleMoveToDetail = (id: string) => {
     navigate(`/content/${id}`);
   };
-
-  useEffect(() => {
-    if (!ref.current) return;
-    const observer = new IntersectionObserver(callback);
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [callback]);
 
   if (isError) {
     return (
@@ -102,7 +54,7 @@ function ContentListPage() {
           </ListItem>
         ))}
       </List>
-      <Divider marginY={4} ref={ref} />
+      {hasNext && !isLoading && <Divider marginY={4} ref={observerRef} />}
     </Flex>
   );
 }
