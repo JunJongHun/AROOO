@@ -6,20 +6,18 @@ import {
   List,
   ListIcon,
   ListItem,
-  Skeleton,
   Spinner,
   Text,
 } from '@chakra-ui/react';
 import { FaHeart } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { getContentList } from '../apis/apis';
+import { Content } from '../types';
 
 function ContentListPage() {
   const navigate = useNavigate();
 
-  const [contentList, setContentList] = useState<
-    Array<{ id: string; title: string; likes: number }>
-  >([]);
+  const [contentList, setContentList] = useState<Array<Content>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 

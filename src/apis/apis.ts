@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { BASE_API_URL } from './constants';
+import { Content } from '../types';
 
 export const getContentList = async (params: {
   skip?: number;
@@ -7,7 +8,7 @@ export const getContentList = async (params: {
 }) => {
   try {
     const url = `${BASE_API_URL}/library/content`;
-    const response = await axios.get(url, { params });
+    const response = await axios.get<Content[]>(url, { params });
     return response.data;
   } catch (error) {
     return Promise.reject(error);
