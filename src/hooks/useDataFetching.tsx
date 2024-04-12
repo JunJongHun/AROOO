@@ -36,7 +36,7 @@ const useDataFetching = <T,>(
     };
 
     fetchData();
-  }, [url, method]);
+  }, [url, method]); // TODO: data가 변경될 때도 요청을 해야할 경우가 있을 수 있음(리펙토링 필요)
 
   return { isLoading, res, isError };
 };

@@ -4,8 +4,13 @@ import { list } from './data';
 
 export const handlers = [
   // content list API
-  http.get(`${BASE_API_URL}/library/content`, () => {
-    return HttpResponse.json(list);
+  http.get(`${BASE_API_URL}/library/content`, ({ request }) => {
+    const { searchParams } = new URL(request.url);
+    const skip = Number(searchParams.get('skip')) || 0;
+    const limit = Number(searchParams.get('limit')) || 10;
+    const filteredList = list.slice(skip, skip + limit);
+
+    return HttpResponse.json(filteredList);
   }),
 
   // content detail API
