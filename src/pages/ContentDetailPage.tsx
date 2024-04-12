@@ -1,31 +1,55 @@
-import { useEffect, useState } from 'react';
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import { FiHeart } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import { getContentDetail, postContentLikeUp } from '../apis/apis';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ContentDetail } from '../types';
 
 function ContentDetailPage() {
   const { contentId } = useParams<{ contentId: string }>();
 
   const { isError, data: contentDetail } = useQuery({
-    queryKey: ['content', contentId],
+    queryKey: ['contentDetail', contentId],
     queryFn: () => getContentDetail(contentId || ''),
   });
-  const [likes, setLikes] = useState<number>(0);
 
-  const handleLikeUp = async () => {
-    try {
-      setLikes((pre) => pre + 1);
-      await postContentLikeUp(contentId || '');
-    } catch (error) {
-      setLikes((pre) => pre - 1);
-    }
-  };
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    contentDetail && setLikes(contentDetail.likes);
-  }, [contentDetail]);
+  const { mutate, isPending } = useMutation({
+    mutationFn: postContentLikeUp,
+    onMutate: (variables) => {
+      const contentId = variables as string;
+
+      // Optimistic update
+      const previousContentDetail = queryClient.getQueryData<ContentDetail>([
+        'contentDetail',
+        contentId,
+      ]);
+
+      if (!previousContentDetail) return;
+      // 캐싱되어 있는 값 업데이트
+      queryClient.setQueryData(['contentDetail', contentId], () => ({
+        ...previousContentDetail,
+        likes: previousContentDetail?.likes + 1,
+      }));
+
+      return { previousContentDetail };
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      // queryClient.invalidateQueries(['contentDetail', contentId]);
+    },
+    onError(error, variables, context) {
+      // Rollback
+      const { previousContentDetail } = context as {
+        previousContentDetail: ContentDetail;
+      };
+
+      queryClient.setQueryData(['contentDetail', contentId], () => ({
+        ...previousContentDetail,
+      }));
+    },
+  });
 
   if (isError) {
     return (
@@ -56,10 +80,11 @@ function ContentDetailPage() {
           w={6}
           h={6}
           as={FiHeart}
-          onClick={handleLikeUp}
+          onClick={() => !isPending && mutate(contentId || '')}
           _hover={{ cursor: 'pointer' }}
+          aria-disabled={isPending}
         />
-        <Text fontSize={24}>{likes}</Text>
+        <Text fontSize={24}>{contentDetail?.likes}</Text>
       </Flex>
     </Flex>
   );
