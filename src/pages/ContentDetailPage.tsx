@@ -1,14 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Divider, Flex, Icon, Text } from '@chakra-ui/react';
 import { FiHeart } from 'react-icons/fi';
+import { useParams } from 'react-router-dom';
+import { getContentDetail, postContentLikeUp } from '../apis/apis';
 
 function ContentDetailPage() {
-  const [contentDetail, setContentDetail] = useState({
-    id: 2,
-    title: 'another title',
-    likes: 127,
-    content:
-      '<div class="blog-post">        <p>This is an engaging and informative post related to <em>another title</em>. It has been well-received, garnering <strong>5</strong> likes from our readers. Stay tuned for more insights and updates on this topic.</p>\n    </div>\n\n    <div class="blog-post">\n        <h2>another title</h2>\n        <p>This is an engaging and informative post related to <em>another title</em>. It has been well-received, garnering <strong>5</strong> likes from our readers. Stay tuned for more insights and updates on this topic.</p>\n    </div>\n \n    <div class="blog-post">\n        <h2>another title</h2>\n        <p>This is an engaging and informative post related to <em>another title</em>. It has been well-received, garnering <strong>5</strong> likes from our readers. Stay tuned for more insights and updates on this topic.</p>\n    </div>\n \n    <div class="blog-post">\n        <h2>another title</h2>\n        <p>This is an engaging and informative post related to <em>another title</em>. It has been well-received, garnering <strong>5</strong> likes from our readers. Stay tuned for more insights and updates on this topic.</p>\n    </div>\n \n    <div class="blog-post">\n        <h2>another title</h2>\n        <p>This is an engaging and informative post related to <em>another title</em>. It has been well-received, garnering <strong>5</strong> likes from our readers. Stay tuned for more insights and updates on this topic.</p>\n    </div>\n \n    <div class="blog-post">\n        <h2>another title</h2>\n        <p>This is an engaging and informative post related to <em>another title</em>. It has been well-received, garnering <strong>5</strong> likes from our readers. Stay tuned for more insights and updates on this topic.</p>\n    </div>\n \n    <div class="blog-post">\n        <h2>another title</h2>\n        <p>This is an engaging and informative post related to <em>another title</em>. It has been well-received, garnering <strong>5</strong> likes from our readers. Stay tuned for more insights and updates on this topic.</p>\n    </div>\n \n     ',
+  const { contentId } = useParams<{ contentId: string }>();
+
+  const [contentDetail, setContentDetail] = useState<{
+    id: string;
+    title: string;
+    likes: number;
+    content: string;
+  }>({
+    id: '',
+    title: '',
+    likes: 0,
+    content: '',
   });
 
   const handleLikeUp = () => {
@@ -16,7 +24,17 @@ function ContentDetailPage() {
       ...prev,
       likes: prev.likes + 1,
     }));
+
+    postContentLikeUp(contentId || '').then((data) => {
+      console.log(data);
+    });
   };
+
+  useEffect(() => {
+    getContentDetail(contentId || '').then((data) => {
+      setContentDetail(data);
+    });
+  }, [contentId]);
 
   return (
     <Flex h={'100%'} flexDirection={'column'}>
