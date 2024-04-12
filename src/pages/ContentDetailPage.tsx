@@ -2,17 +2,16 @@ import { useEffect, useState } from 'react';
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import { FiHeart } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
-import useDataFetching from '../hooks/useDataFetching';
-import { ContentDetail } from '../types';
-import { BASE_API_URL } from '../apis/constants';
-import { postContentLikeUp } from '../apis/apis';
+import { getContentDetail, postContentLikeUp } from '../apis/apis';
+import { useQuery } from '@tanstack/react-query';
 
 function ContentDetailPage() {
   const { contentId } = useParams<{ contentId: string }>();
 
-  const { isError, res: contentDetail } = useDataFetching<ContentDetail>(
-    `${BASE_API_URL}/library/content/${contentId}`
-  );
+  const { isError, data: contentDetail } = useQuery({
+    queryKey: ['content', contentId],
+    queryFn: () => getContentDetail(contentId || ''),
+  });
   const [likes, setLikes] = useState<number>(0);
 
   const handleLikeUp = async () => {
