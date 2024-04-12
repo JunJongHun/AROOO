@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Box,
   Divider,
@@ -6,56 +6,80 @@ import {
   List,
   ListIcon,
   ListItem,
+  Skeleton,
+  Spinner,
   Text,
 } from '@chakra-ui/react';
 import { FaHeart } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { getContentList } from '../apis/apis';
 
 function ContentListPage() {
   const navigate = useNavigate();
 
-  const [contentList, setContentList] = useState([
-    { id: 2, title: 'another title', likes: 5 },
-    { id: 3, title: 'more titles', likes: 10 },
-    { id: 4, title: 'even more titles', likes: 2 },
-    { id: 5, title: 'more titles', likes: 8 },
-    { id: 6, title: 'even more titles', likes: 3 },
-    { id: 7, title: 'additional titles', likes: 6 },
-    { id: 8, title: 'extra titles', likes: 1 },
-    { id: 9, title: 'bonus titles', likes: 4 },
-    { id: 10, title: 'special titles', likes: 7 },
-    { id: 11, title: 'unique titles', likes: 2 },
-    { id: 12, title: 'different titles', likes: 9 },
-    { id: 13, title: 'more different titles', likes: 5 },
-    { id: 14, title: 'even more different titles', likes: 0 },
-  ]);
+  const [contentList, setContentList] = useState<
+    Array<{ id: string; title: string; likes: number }>
+  >([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleMoveToDetail = (id: number) => {
+  const handleMoveToDetail = (id: string) => {
     navigate(`/content/${id}`);
   };
 
+  useEffect(() => {
+    setIsLoading(true);
+    getContentList({ skip: 0, limit: 10 })
+      .then((data) => {
+        setContentList(data);
+      })
+      .catch((error) => {
+        setError(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  if (error) {
+    return (
+      <Box>
+        <Text>Error</Text>
+      </Box>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Flex h={'100%'} justify={'center'} align={'center'}>
+        <Spinner />
+      </Flex>
+    );
+  }
+
   return (
-    <Box flex={1}>
-      <List>
+    <Flex h={'100%'} direction={'column'}>
+      <List flex={1}>
         {contentList?.map((content) => (
           <ListItem
+            key={content?.id}
             background={'white'}
             padding={3}
-            onClick={() => handleMoveToDetail(1)}
+            onClick={() => handleMoveToDetail(content?.id)}
             _hover={{ cursor: 'pointer', background: 'gray.50' }}
           >
             <Text fontWeight={600} fontSize={'large'}>
-              {content.title}
+              {content?.title}
             </Text>
             <Flex alignItems={'center'}>
               <ListIcon as={FaHeart} color="black" />
-              <Text>{content.likes}</Text>
+              <Text>{content?.likes}</Text>
             </Flex>
           </ListItem>
         ))}
       </List>
       <Divider marginY={4} />
-    </Box>
+    </Flex>
   );
 }
 
