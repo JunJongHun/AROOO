@@ -9,12 +9,12 @@ export const handlers = [
     const skip = Number(searchParams.get('skip'));
     const limit = Number(searchParams.get('limit'));
 
-    // 2초뒤 에러 반환
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        reject(new Error('Internal Server Error'));
-      }, 2000);
-    });
+    // // 2초뒤 에러 반환
+    // return new Promise((resolve, reject) => {
+    //   setTimeout(() => {
+    //     reject(new Error('Internal Server Error'));
+    //   }, 2000);
+    // });
 
     if (skip === undefined && limit === undefined) {
       return HttpResponse.json(list);
@@ -30,12 +30,12 @@ export const handlers = [
     const { contentId } = params;
     const content = list.find((item) => item.id === contentId);
 
-    //2초뒤 에러 반환
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        reject(new Error('Internal Server Error'));
-      }, 2000);
-    });
+    // //2초뒤 에러 반환
+    // return new Promise((resolve, reject) => {
+    //   setTimeout(() => {
+    //     reject(new Error('Internal Server Error'));
+    //   }, 2000);
+    // });
 
     if (!content) {
       return HttpResponse.error();
