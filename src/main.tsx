@@ -5,13 +5,18 @@ import { worker } from './mocks/browsers.ts';
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-// import './styles/index.css';
 
 if (import.meta.env.DEV) {
   await worker.start();
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 0,
+    },
+  },
+});
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   // <React.StrictMode>

@@ -23,6 +23,13 @@ export const handlers = [
     const { contentId } = params;
     const content = list.find((item) => item.id === contentId);
 
+    //2초뒤 에러 반환
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject(new Error('Internal Server Error'));
+      }, 2000);
+    });
+
     if (!content) {
       return HttpResponse.error();
     }

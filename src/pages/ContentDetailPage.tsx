@@ -2,13 +2,17 @@ import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import { FiHeart } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import { getContentDetail, postContentLikeUp } from '../apis/apis';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { ContentDetail } from '../types';
 
 function ContentDetailPage() {
   const { contentId } = useParams<{ contentId: string }>();
 
-  const { isError, data: contentDetail } = useQuery({
+  const { data: contentDetail } = useSuspenseQuery({
     queryKey: ['contentDetail', contentId],
     queryFn: () => getContentDetail(contentId || ''),
   });
@@ -50,14 +54,6 @@ function ContentDetailPage() {
       }));
     },
   });
-
-  if (isError) {
-    return (
-      <Box>
-        <Text>Error</Text>
-      </Box>
-    );
-  }
 
   return (
     <Flex h={'100%'} flexDirection={'column'}>
