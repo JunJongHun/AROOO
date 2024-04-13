@@ -1,9 +1,9 @@
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import { FiHeart } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
-import { getContentDetail, postContentLikeUp } from '../apis/apis';
-import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
-import { ContentDetail } from '../types';
+import { getContentDetail } from '../apis/apis';
+import { useQuery } from '@tanstack/react-query';
+import useLikeUp from '../hooks/useLikeUp';
 
 function ContentDetailPage() {
   const { contentId } = useParams<{ contentId: string }>();
@@ -13,43 +13,7 @@ function ContentDetailPage() {
     queryFn: () => getContentDetail(contentId || ''),
   });
 
-  const queryClient = useQueryClient();
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: postContentLikeUp,
-    onMutate: (variables) => {
-      const contentId = variables as string;
-
-      // Optimistic update
-      const previousContentDetail = queryClient.getQueryData<ContentDetail>([
-        'contentDetail',
-        contentId,
-      ]);
-
-      if (!previousContentDetail) return;
-      // 캐싱되어 있는 값 업데이트
-      queryClient.setQueryData(['contentDetail', contentId], () => ({
-        ...previousContentDetail,
-        likes: previousContentDetail?.likes + 1,
-      }));
-
-      return { previousContentDetail };
-    },
-    onSuccess: () => {
-      // Invalidate and refetch
-      // queryClient.invalidateQueries(['contentDetail', contentId]);
-    },
-    onError(_, __, context) {
-      // Rollback
-      const { previousContentDetail } = context as {
-        previousContentDetail: ContentDetail;
-      };
-
-      queryClient.setQueryData(['contentDetail', contentId], () => ({
-        ...previousContentDetail,
-      }));
-    },
-  });
+  const { mutate, isPending } = useLikeUp(contentId || '');
 
   return (
     <Flex h={'100%'} flexDirection={'column'}>

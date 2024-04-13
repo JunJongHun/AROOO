@@ -13,6 +13,7 @@ if (import.meta.env.DEV) {
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      staleTime: 1000 * 60 * 5, // 5분
       retry: 0,
     },
   },
