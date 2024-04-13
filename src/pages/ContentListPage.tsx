@@ -1,15 +1,24 @@
 import { Box, Divider, Text, VStack } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import useInfiniteScroll from '../hooks/useInfiniteScroll';
-import useContentList from '../hooks/useContentList';
 import ContentList from '../components/ContentList';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { getContentList } from '../apis/apis';
 
 function ContentListPage() {
   const navigate = useNavigate();
-  const { contentList, isLoading, isError, fetchContentList, hasNext } =
-    useContentList();
 
-  const observerRef = useInfiniteScroll(fetchContentList, {
+  const { data, fetchNextPage, hasNextPage, isFetching, isError } =
+    useInfiniteQuery({
+      queryKey: ['contentList'],
+      queryFn: ({ pageParam }) => getContentList({ skip: pageParam, limit: 8 }),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
+        return lastPage.length < 8 ? undefined : lastPageParam + 8;
+      },
+    });
+
+  const observerRef = useInfiniteScroll(fetchNextPage, {
     rootMargin: '200px',
   });
 
@@ -28,10 +37,10 @@ function ContentListPage() {
   return (
     <VStack>
       <ContentList
-        contentList={contentList}
+        contentList={data?.pages.flat() || []}
         handleMoveToDetail={handleMoveToDetail}
       />
-      {hasNext && !isLoading && <Divider marginY={4} ref={observerRef} />}
+      {hasNextPage && !isFetching && <Divider marginY={4} ref={observerRef} />}
     </VStack>
   );
 }

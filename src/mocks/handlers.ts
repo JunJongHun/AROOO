@@ -6,11 +6,16 @@ export const handlers = [
   // content list API
   http.get(`${BASE_API_URL}/library/content`, ({ request }) => {
     const { searchParams } = new URL(request.url);
-    const skip = Number(searchParams.get('skip')) || 0;
-    const limit = Number(searchParams.get('limit')) || 10;
-    const filteredList = list.slice(skip, skip + limit);
+    const skip = Number(searchParams.get('skip'));
+    const limit = Number(searchParams.get('limit'));
 
-    return HttpResponse.json(filteredList);
+    if (skip === undefined && limit === undefined) {
+      return HttpResponse.json(list);
+    } else if (skip && limit === undefined) {
+      return HttpResponse.json(list.slice(skip));
+    } else if (skip === undefined && limit) {
+      return HttpResponse.json(list.slice(0, limit));
+    } else return HttpResponse.json(list.slice(skip, skip + limit));
   }),
 
   // content detail API
