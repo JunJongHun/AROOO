@@ -8,6 +8,11 @@ AROOO WEB 프론트엔드 과제 프로젝트 입니다.
 - node.js v18.19.1
 
 ## 설치 및 실행
+### 레파지토리 클론
+
+```bash
+$ git clone https://github.com/JunJongHun/AROOO.git
+```
 
 ### 의존성 패키지 설치
 
@@ -23,15 +28,20 @@ npm run dev
 
 기본 <http://localhost:5173> 로 접속
 
-## 구성 및 선정 이유
+## 기술 스택
 
-- React : React는 널리 사용되는 프론트엔드 라이브러리로 컴포넌트 기반 개발과 가독성 있는 코드 작성을 위해 선택했습니다.
-- vite  : Vite는 빠른 개발 환경을 제공하는 빌드 도구로, 개발 효율성을 높이고 개발 시간을 단축하기 위해 선택했습니다.
+- React
+- Typescript
+- Vite
+- React Query
+- Axios
+- React Router Dom
+- MSW
+- Chakra UI
 
 ### 디렉토리 구조
 
 ```bash
-.
 📦src
  ┣ 📂apis
  ┃ ┣ 📜apis.ts
@@ -78,6 +88,21 @@ npm run dev
 - [ ] 비지니스 로직 테스트
 
 ### 구현 내용
+- 컴포넌트 내 비지니스 로직을 Custom Hook으로 추상화 하여 재사용성과 UI에 집중 할 수 있도록 분리
+  - useDataFetching : 컴포넌트 내 API 요청 코드 작성 시, 중복 작성되는 state, useEffect를 줄이고 데이터 요청에 상태에 따른 state를 쉽게 관리
+  - useContentList : 콘텐츠 목록 무한스크롤을 구현하기 위해 다음 목록을 불러올 수 있는지 판단 가능한 hasNext를 포함한 필요한 상태 관리
+  - useInfiniteScroll : Intersection Observer API를 활용하여 특정 요소를 관찰 할 수 있고, 옵저버가 관찰하는 요소의 가시성 여부에 따라 callbalck 함수 실행 ( 무한스크롤 구현에 활용 )
+
+- MSW를 활용하여 Mock Sever를 구현 
+
+- 서버 부하를 줄이고 빠른 렌더링을 위한 React-Query 캐싱 기능 적용
+
+- 좋아요 업데이트 시, Optimistic Update 적용하여 사용자 경험 개선 고려
+  - React-Query를 활용하여 좋아요 버튼 클릭시 캐싱된 값을 먼저 업데이트 하고 API 요청 실패 시, 이전 값으로 Rollback 구현
+  - 콘텐츠 상세 페이지 좋아요 값 업데이트 성공 시, 콘텐츠 목록에 좋아요 값 동기화
+
+
+### 구현 화면
 
 1.  Api 서버로부터 콘텐츠 목록을 불러와 화면에 표시합니다.
 
@@ -85,14 +110,14 @@ npm run dev
 
   
   
-3.  목록 내 아이템을 선택하면 콘텐츠 상세 페이지로 이동합니다.
+2.  목록 내 아이템을 선택하면 콘텐츠 상세 페이지로 이동합니다.
 
 ![아루2](https://github.com/JunJongHun/AROOO/assets/90402926/47c42d2a-c6ba-49a9-888c-c91d8c4876f7)
 
 
 
 
-5.  좋아요 버튼 클릭 시 API를 통해 서버에 값을 업데이트 합니다.
-6.  상세 페이지 내에서의 좋아요 버튼 클릭 시 목록 내 아이템에도 좋아요 수 값이 업데이트가 되어야 합니다.
+3.  좋아요 버튼 클릭 시 API를 통해 서버에 값을 업데이트 합니다.
+4.  상세 페이지 내에서의 좋아요 버튼 클릭 시 목록 내 아이템에도 좋아요 수 값이 업데이트가 되어야 합니다.
 
 ![아루3](https://github.com/JunJongHun/AROOO/assets/90402926/748faece-0751-415e-83d5-73c388e7059f)
