@@ -40,13 +40,13 @@ export const handlers = [
     }
 
     //2초뒤 에러 반환
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        reject(new Error('Internal Server Error'));
-      }, 2000);
-    });
+    // return new Promise((resolve, reject) => {
+    //   setTimeout(() => {
+    //     reject(new Error('Internal Server Error'));
+    //   }, 2000);
+    // });
 
-    // content.likes += 1;
-    // return HttpResponse.json({ likes: content.likes });
+    content.likes += 1;
+    return HttpResponse.json({ likes: content.likes });
   }),
 ];
