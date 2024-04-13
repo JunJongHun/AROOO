@@ -1,6 +1,7 @@
 import { Flex, ListIcon, ListItem, Text } from '@chakra-ui/react';
 import { Content } from '../types';
 import { FaHeart } from 'react-icons/fa';
+import React from 'react';
 
 type ContentItemProps = {
   content: Content;
@@ -8,6 +9,8 @@ type ContentItemProps = {
 };
 
 function ContentItem({ content, handleMoveToDetail }: ContentItemProps) {
+  console.log('content', content.likes);
+
   return (
     <ListItem
       padding={3}
@@ -25,4 +28,4 @@ function ContentItem({ content, handleMoveToDetail }: ContentItemProps) {
   );
 }
 
-export default ContentItem;
+export default React.memo(ContentItem);

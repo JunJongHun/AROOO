@@ -4,6 +4,7 @@ import useInfiniteScroll from '../hooks/useInfiniteScroll';
 import ContentList from '../components/ContentList';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getContentList } from '../apis/apis';
+import { useCallback } from 'react';
 
 function ContentListPage() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ function ContentListPage() {
       queryKey: ['contentList'],
       queryFn: ({ pageParam }) => getContentList({ skip: pageParam, limit: 8 }),
       initialPageParam: 0,
-      getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
+      getNextPageParam: (lastPage, _, lastPageParam) => {
         return lastPage.length < 8 ? undefined : lastPageParam + 8;
       },
     });
@@ -22,9 +23,16 @@ function ContentListPage() {
     rootMargin: '200px',
   });
 
-  const handleMoveToDetail = (id: string) => {
-    navigate(`/content/${id}`);
-  };
+  const handleMoveToDetail = useCallback(
+    (id: string) => {
+      navigate(`/content/${id}`);
+    },
+    [navigate]
+  );
+
+  // const handleMoveToDetail = (id: string) => {
+  //   navigate(`/content/${id}`);
+  // };
 
   if (isError) {
     return (

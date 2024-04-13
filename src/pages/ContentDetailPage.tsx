@@ -39,7 +39,7 @@ function ContentDetailPage() {
       // Invalidate and refetch
       // queryClient.invalidateQueries(['contentDetail', contentId]);
     },
-    onError(error, variables, context) {
+    onError(_, __, context) {
       // Rollback
       const { previousContentDetail } = context as {
         previousContentDetail: ContentDetail;
