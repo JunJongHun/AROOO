@@ -6,10 +6,13 @@ import {
   SkeletonCircle,
 } from '@chakra-ui/react';
 
-function SkeletonContentList() {
+const SKELETON_COUNT = 10;
+const SKELETON_LIST = Array.from({ length: SKELETON_COUNT });
+
+const SkeletonContentList = () => {
   return (
     <List>
-      {Array.from({ length: 10 }).map((_, index) => (
+      {SKELETON_LIST.map((_, index) => (
         <ListItem key={index} padding={2}>
           <Skeleton h={8} />
           <Flex gap={2} marginTop={2}>
@@ -20,6 +23,6 @@ function SkeletonContentList() {
       ))}
     </List>
   );
-}
+};
 
 export default SkeletonContentList;

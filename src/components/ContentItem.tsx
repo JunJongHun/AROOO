@@ -1,8 +1,8 @@
 import { Flex, ListIcon, ListItem, Text } from '@chakra-ui/react';
-import { Content } from '../types';
 import { FaHeart } from 'react-icons/fa';
 import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Content } from '../apis/contents';
 
 type ContentItemProps = {
   content: Content;

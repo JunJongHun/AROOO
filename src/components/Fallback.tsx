@@ -8,12 +8,14 @@ import {
   Text,
 } from '@chakra-ui/react';
 
+//TODO: 에러 발생 시, 네트워크 에러, 런타임에러 등을 처리하는 Fallback 고려
+
 type FallbackProps = {
   error: Error;
   resetErrorBoundary: () => void;
 };
 
-function Fallback({ error, resetErrorBoundary }: FallbackProps) {
+const Fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
     <Card align="center">
       <CardHeader>
@@ -29,6 +31,6 @@ function Fallback({ error, resetErrorBoundary }: FallbackProps) {
       </CardFooter>
     </Card>
   );
-}
+};
 
 export default Fallback;

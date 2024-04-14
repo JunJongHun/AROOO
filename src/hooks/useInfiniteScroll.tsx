@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react';
 
 // useInfiniteScroll 커스텀 훅
-function useInfiniteScroll(callback = () => {}, options = {}) {
+const useInfiniteScroll = (
+  callback: () => void,
+  options?: IntersectionObserverInit | undefined
+) => {
   // 옵저버를 위한 ref 생성
   const observerRef = useRef(null);
-
-  // observer callback
 
   // Intersection Observer 초기화 및 설정
   useEffect(() => {
@@ -23,6 +24,6 @@ function useInfiniteScroll(callback = () => {}, options = {}) {
   }, [callback, options]);
 
   return observerRef; // 옵저버가 관찰할 요소의 ref 반환
-}
+};
 
 export default useInfiniteScroll;

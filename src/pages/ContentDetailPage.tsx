@@ -1,19 +1,20 @@
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import { FiHeart } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
-import { getContentDetail } from '../apis/apis';
+import { getContentDetail } from '../apis/contents';
 import { useQuery } from '@tanstack/react-query';
 import useLikeUp from '../hooks/useLikeUp';
+import { QueryKeys } from '../queryClient';
 
-function ContentDetailPage() {
+const ContentDetailPage = () => {
   const { contentId } = useParams<{ contentId: string }>();
 
   const { data: contentDetail } = useQuery({
-    queryKey: ['contentDetail', contentId],
-    queryFn: () => getContentDetail(contentId || ''),
+    queryKey: [QueryKeys.DETAIL, contentId],
+    queryFn: () => getContentDetail(contentId),
   });
 
-  const { mutate, isPending } = useLikeUp(contentId || '');
+  const { mutate, isPending } = useLikeUp(contentId);
 
   return (
     <Flex h={'100%'} flexDirection={'column'}>
@@ -36,7 +37,7 @@ function ContentDetailPage() {
           w={6}
           h={6}
           as={FiHeart}
-          onClick={() => !isPending && mutate(contentId || '')}
+          onClick={() => !isPending && mutate(contentId)}
           _hover={{ cursor: 'pointer' }}
           aria-disabled={isPending}
         />
@@ -44,6 +45,6 @@ function ContentDetailPage() {
       </Flex>
     </Flex>
   );
-}
+};
 
 export default ContentDetailPage;

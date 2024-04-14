@@ -1,10 +1,10 @@
 // hooks/useContentList.js
 import { useState, useCallback } from 'react';
-import axios, { AxiosError } from 'axios';
-import { BASE_API_URL } from '../apis/constants';
-import { Content } from '../types';
+import { AxiosError } from 'axios';
+import { Content } from '../apis/contents';
+import { getContentList } from '../apis/contents';
 
-function useContentList(limit = 10) {
+const useContentList = (limit = 10) => {
   const [contentList, setContentList] = useState<Content[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState<AxiosError | null>(null);
@@ -16,10 +16,8 @@ function useContentList(limit = 10) {
 
     setIsLoading(true);
     try {
-      const response = await axios.get(
-        `${BASE_API_URL}/library/content?skip=${skip}&limit=${limit}`
-      );
-      const newContent = response.data;
+      const response = await getContentList({ skip, limit });
+      const newContent = response;
 
       if (newContent.length < limit) {
         setHasNext(false);
@@ -35,6 +33,6 @@ function useContentList(limit = 10) {
   }, [skip, limit, hasNext]);
 
   return { contentList, isLoading, isError, fetchContentList, hasNext };
-}
+};
 
 export default useContentList;

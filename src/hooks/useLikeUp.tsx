@@ -1,8 +1,15 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { postContentLikeUp } from '../apis/apis';
-import { ContentDetail } from '../types';
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
+import { postContentLikeUp, Content, ContentDetail } from '../apis/contents';
 
-function useLikeUp(contentId: string) {
+const useLikeUp = (contentId: string = '') => {
+  if (!contentId) {
+    throw new Error('contentId is required');
+  }
+
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
@@ -26,29 +33,29 @@ function useLikeUp(contentId: string) {
       return { previousContentDetail };
     },
     onSuccess: () => {
-      // 성공 시, 쿼리키 ['contentList']에 해당하는 쿼리를 다시 불러옴
-      // queryClient.invalidateQueries({ queryKey: ['contentList'] });
-      queryClient.setQueryData(['contentList'], (data) => {
-        const pages = data?.pages || [];
-        const changedPages = pages.map((page) => {
-          return page.map((content) => {
-            if (content.id === contentId) {
-              return {
-                ...content,
-                likes: content.likes + 1,
-              };
-            }
-            return content;
+      // 성공 시, 쿼리키 ['contentList']에 해당하는 쿼리를 다시 불러옴 (콘텐츠 목록 좋아요 동기화 하기 위함)
+      queryClient.setQueryData<InfiniteData<Content[], unknown>>(
+        ['contentList'],
+        (data) => {
+          const pages = data?.pages || [];
+          const changedPages = pages.map((page) => {
+            return page.map((content) => {
+              if (content.id === contentId) {
+                return {
+                  ...content,
+                  likes: content.likes + 1,
+                };
+              }
+              return content;
+            });
           });
-        });
 
-        console.log(data);
-
-        return {
-          pages: changedPages,
-          pageParams: data?.pageParams,
-        };
-      });
+          return {
+            pages: changedPages,
+            pageParams: data?.pageParams || [],
+          };
+        }
+      );
     },
     onError(_, __, context) {
       // Rollback
@@ -63,6 +70,6 @@ function useLikeUp(contentId: string) {
   });
 
   return { mutate, isPending };
-}
+};
 
 export default useLikeUp;

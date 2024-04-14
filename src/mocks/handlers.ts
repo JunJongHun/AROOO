@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { BASE_API_URL } from '../apis/constants';
+import { BASE_API_URL } from '../apis/config';
 import { list } from './data';
 
 export const handlers = [
@@ -8,13 +8,6 @@ export const handlers = [
     const { searchParams } = new URL(request.url);
     const skip = Number(searchParams.get('skip'));
     const limit = Number(searchParams.get('limit'));
-
-    // // 2초뒤 에러 반환
-    // return new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-    //     reject(new Error('Internal Server Error'));
-    //   }, 2000);
-    // });
 
     if (skip === undefined && limit === undefined) {
       return HttpResponse.json(list);
@@ -29,13 +22,6 @@ export const handlers = [
   http.get(`${BASE_API_URL}/library/content/:contentId`, ({ params }) => {
     const { contentId } = params;
     const content = list.find((item) => item.id === contentId);
-
-    // //2초뒤 에러 반환
-    // return new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-    //     reject(new Error('Internal Server Error'));
-    //   }, 2000);
-    // });
 
     if (!content) {
       return HttpResponse.error();
@@ -53,7 +39,7 @@ export const handlers = [
       return HttpResponse.error();
     }
 
-    //2초뒤 에러 반환
+    // 2초뒤 에러 반환 (테스트용)
     // return new Promise((resolve, reject) => {
     //   setTimeout(() => {
     //     reject(new Error('Internal Server Error'));

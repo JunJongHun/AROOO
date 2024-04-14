@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { BASE_API_URL } from './constants';
-import { Content, ContentDetail } from '../types';
+import { BASE_API_URL } from './config';
 
 export const getContentList = async (params: {
   skip?: number;
@@ -16,7 +15,11 @@ export const getContentList = async (params: {
   }
 };
 
-export const getContentDetail = async (contentId: string) => {
+export const getContentDetail = async (contentId: string = '') => {
+  if (!contentId) {
+    return Promise.reject(new Error('contentId is required'));
+  }
+
   try {
     const url = `${BASE_API_URL}/library/content/${contentId}`;
     const response = await axios.get<ContentDetail>(url);
@@ -26,7 +29,11 @@ export const getContentDetail = async (contentId: string) => {
   }
 };
 
-export const postContentLikeUp = async (contentId: string) => {
+export const postContentLikeUp = async (contentId: string = '') => {
+  if (!contentId) {
+    return Promise.reject(new Error('contentId is required'));
+  }
+
   try {
     const url = `${BASE_API_URL}/library/content/${contentId}/like`;
     const response = await axios.post(url);
@@ -34,4 +41,14 @@ export const postContentLikeUp = async (contentId: string) => {
   } catch (error) {
     return Promise.reject(error);
   }
+};
+
+export type Content = {
+  id: string;
+  title: string;
+  likes: number;
+};
+
+export type ContentDetail = Content & {
+  content: string;
 };

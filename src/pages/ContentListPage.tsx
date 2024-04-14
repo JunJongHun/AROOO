@@ -1,33 +1,20 @@
-import { Divider, VStack } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
-import useInfiniteScroll from '../hooks/useInfiniteScroll';
+import { VStack } from '@chakra-ui/react';
 import ContentList from '../components/ContentList';
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { getContentList } from '../apis/apis';
-import { useCallback } from 'react';
+import QueryErrorBoundary from '../components/QueryErrorBoundary';
+import { Suspense } from 'react';
+import SkeletonContentList from '../components/SkeletonContentList';
+import Fallback from '../components/Fallback';
 
-function ContentListPage() {
-  const { data, fetchNextPage, hasNextPage, isFetching } =
-    useSuspenseInfiniteQuery({
-      queryKey: ['contentList'],
-      queryFn: ({ pageParam }) => getContentList({ skip: pageParam, limit: 8 }),
-      initialPageParam: 0,
-      getNextPageParam: (lastPage, _, lastPageParam) => {
-        return lastPage.length < 8 ? undefined : lastPageParam + 8;
-      },
-    });
-
-  const observerRef = useInfiniteScroll(fetchNextPage, {
-    rootMargin: '200px',
-  });
-
+const ContentListPage = () => {
   return (
     <VStack>
-      <ContentList contentList={data?.pages.flat() || []} />
-
-      {hasNextPage && !isFetching && <Divider marginY={4} ref={observerRef} />}
+      <QueryErrorBoundary FallbackComponent={Fallback}>
+        <Suspense fallback={<SkeletonContentList />}>
+          <ContentList />
+        </Suspense>
+      </QueryErrorBoundary>
     </VStack>
   );
-}
+};
 
 export default ContentListPage;
