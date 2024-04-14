@@ -23,7 +23,7 @@ const ContentDetailPage = () => {
         <Text fontSize={32}>{contentDetail?.title}</Text>
       </Box>
       <Box flex={1}>
-        <Text>{contentDetail?.content}</Text>
+        <Text whiteSpace="pre-wrap">{contentDetail?.content}</Text>
       </Box>
       <Flex
         position={'sticky'}
