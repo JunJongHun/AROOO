@@ -10,7 +10,7 @@ const ContentDetailPage = () => {
   const { contentId } = useParams<{ contentId: string }>();
 
   const { data: contentDetail } = useQuery({
-    queryKey: [QueryKeys.DETAIL, contentId],
+    queryKey: [QueryKeys.CONTENTS, QueryKeys.DETAIL, contentId],
     queryFn: () => getContentDetail(contentId),
   });
 

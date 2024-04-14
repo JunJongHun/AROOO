@@ -4,6 +4,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { postContentLikeUp, Content, ContentDetail } from '../apis/contents';
+import { QueryKeys } from '../queryClient';
 
 const useLikeUp = (contentId: string = '') => {
   if (!contentId) {
@@ -19,23 +20,27 @@ const useLikeUp = (contentId: string = '') => {
 
       // Optimistic update
       const previousContentDetail = queryClient.getQueryData<ContentDetail>([
-        'contentDetail',
+        QueryKeys.CONTENTS,
+        QueryKeys.DETAIL,
         contentId,
       ]);
 
       if (!previousContentDetail) return;
       // 캐싱되어 있는 값 업데이트
-      queryClient.setQueryData(['contentDetail', contentId], () => ({
-        ...previousContentDetail,
-        likes: previousContentDetail?.likes + 1,
-      }));
+      queryClient.setQueryData(
+        [QueryKeys.CONTENTS, QueryKeys.DETAIL, contentId],
+        () => ({
+          ...previousContentDetail,
+          likes: previousContentDetail?.likes + 1,
+        })
+      );
 
       return { previousContentDetail };
     },
     onSuccess: () => {
       // 성공 시, 쿼리키 ['contentList']에 해당하는 쿼리를 다시 불러옴 (콘텐츠 목록 좋아요 동기화 하기 위함)
       queryClient.setQueryData<InfiniteData<Content[], unknown>>(
-        ['contentList'],
+        [QueryKeys.CONTENTS],
         (data) => {
           const pages = data?.pages || [];
           const changedPages = pages.map((page) => {
@@ -63,9 +68,12 @@ const useLikeUp = (contentId: string = '') => {
         previousContentDetail: ContentDetail;
       };
 
-      queryClient.setQueryData(['contentDetail', contentId], () => ({
-        ...previousContentDetail,
-      }));
+      queryClient.setQueryData(
+        [QueryKeys.CONTENTS, QueryKeys.DETAIL, contentId],
+        () => ({
+          ...previousContentDetail,
+        })
+      );
     },
   });
 
