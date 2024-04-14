@@ -11,7 +11,7 @@ const SKELETON_LIST = Array.from({ length: SKELETON_COUNT });
 
 const SkeletonContentList = () => {
   return (
-    <List>
+    <List w={'100%'}>
       {SKELETON_LIST.map((_, index) => (
         <ListItem key={index} padding={2}>
           <Skeleton h={8} />
