@@ -115,21 +115,27 @@ npm run dev
 - Api 서버로부터 콘텐츠 목록을 불러오고 무한스크롤 적용
 
 ![아루1](https://github.com/JunJongHun/AROOO/assets/90402926/fd89547f-fde8-49bd-8db1-746b446ae55b)
-  
+---
+
+
 - 목록 내 아이템을 선택하면 콘텐츠 상세 페이지로 이동
 
 ![아루2](https://github.com/JunJongHun/AROOO/assets/90402926/47c42d2a-c6ba-49a9-888c-c91d8c4876f7)
+---
 
 - 좋아요 버튼 클릭 시 API를 통해 서버에 값을 업데이트
 - 상세 페이지 내에서의 좋아요 버튼 클릭 시 목록 내 아이템에도 좋아요 수 값이 업데이트
 
 ![아루3](https://github.com/JunJongHun/AROOO/assets/90402926/748faece-0751-415e-83d5-73c388e7059f)
+---
 
 - Suspense 적용
 
 ![아루5](https://github.com/JunJongHun/AROOO/assets/90402926/d19c8856-f7ed-4b78-b9a7-a23406b1fb9a)
+---
 
 - ErrorBoundary 적용
    
 ![아루4](https://github.com/JunJongHun/AROOO/assets/90402926/dbae83ea-df99-43f3-8c7b-adf89e97bc34)
+---
 
