@@ -5,6 +5,9 @@ import { getContentDetail } from '../apis/contents';
 import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from '../queryClient';
 import useOptimisticLikeUpdate from '../hooks/useOptimisticLikeUpdate';
+import HitAreaWrapper from '../components/HitAreaWrapper';
+
+const HIT_SLOP = { top: 7, right: 8, bottom: 7, left: 8 };
 
 const ContentDetailPage = () => {
   const { contentId } = useParams<{ contentId: string }>();
@@ -18,7 +21,7 @@ const ContentDetailPage = () => {
     useOptimisticLikeUpdate(contentId);
 
   return (
-    <Flex h={'100%'} flexDirection={'column'}>
+    <Flex h={'100%'} flexDirection={'column'} padding={2}>
       <Box>
         <Text fontSize={32}>{contentDetail?.title}</Text>
       </Box>
@@ -29,19 +32,18 @@ const ContentDetailPage = () => {
         position={'sticky'}
         bottom={0}
         bg={'white'}
-        gap={1}
+        gap={2}
         padding={4}
         justifyContent={'center'}
         alignItems={'center'}
       >
-        <Icon
-          w={6}
-          h={6}
-          as={FiHeart}
+        <HitAreaWrapper
+          hitSlop={HIT_SLOP}
           onClick={() => !isPending && optimisticLikeUpdate(contentId)}
-          _hover={{ cursor: 'pointer' }}
-          aria-disabled={isPending}
-        />
+          disabled={isPending}
+        >
+          <Icon w={6} h={6} as={FiHeart} />
+        </HitAreaWrapper>
         <Text fontSize={24}>{contentDetail?.likes}</Text>
       </Flex>
     </Flex>

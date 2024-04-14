@@ -9,7 +9,7 @@ function RootLayout() {
         <Header />
       </Box>
       <Divider />
-      <Box w={'100%'} padding={2}>
+      <Box w={'100%'} h={'100vh'} padding={2}>
         <Outlet />
       </Box>
     </VStack>
