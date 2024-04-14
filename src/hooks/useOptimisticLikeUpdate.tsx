@@ -6,14 +6,14 @@ import {
 import { postContentLikeUp, Content, ContentDetail } from '../apis/contents';
 import { QueryKeys } from '../queryClient';
 
-const useLikeUp = (contentId: string = '') => {
+const useOptimisticLikeUpdate = (contentId: string = '') => {
   if (!contentId) {
     throw new Error('contentId is required');
   }
 
   const queryClient = useQueryClient();
 
-  const { mutate, isPending } = useMutation({
+  const { mutate: optimisticLikeUpdate, isPending } = useMutation({
     mutationFn: postContentLikeUp,
     onMutate: async (variables) => {
       const contentId = variables as string;
@@ -77,7 +77,7 @@ const useLikeUp = (contentId: string = '') => {
     },
   });
 
-  return { mutate, isPending };
+  return { optimisticLikeUpdate, isPending };
 };
 
-export default useLikeUp;
+export default useOptimisticLikeUpdate;

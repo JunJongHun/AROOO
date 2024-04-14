@@ -3,8 +3,8 @@ import { FiHeart } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import { getContentDetail } from '../apis/contents';
 import { useQuery } from '@tanstack/react-query';
-import useLikeUp from '../hooks/useLikeUp';
 import { QueryKeys } from '../queryClient';
+import useOptimisticLikeUpdate from '../hooks/useOptimisticLikeUpdate';
 
 const ContentDetailPage = () => {
   const { contentId } = useParams<{ contentId: string }>();
@@ -14,7 +14,8 @@ const ContentDetailPage = () => {
     queryFn: () => getContentDetail(contentId),
   });
 
-  const { mutate, isPending } = useLikeUp(contentId);
+  const { optimisticLikeUpdate, isPending } =
+    useOptimisticLikeUpdate(contentId);
 
   return (
     <Flex h={'100%'} flexDirection={'column'}>
@@ -37,7 +38,7 @@ const ContentDetailPage = () => {
           w={6}
           h={6}
           as={FiHeart}
-          onClick={() => !isPending && mutate(contentId)}
+          onClick={() => !isPending && optimisticLikeUpdate(contentId)}
           _hover={{ cursor: 'pointer' }}
           aria-disabled={isPending}
         />

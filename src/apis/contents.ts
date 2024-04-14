@@ -6,7 +6,6 @@ export const getContentList = async (params: {
   limit?: number;
 }) => {
   try {
-    console.log('api api');
     const url = `${BASE_API_URL}/library/content`;
     const response = await axios.get<Content[]>(url, { params });
     return response.data;
