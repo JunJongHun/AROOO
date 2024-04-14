@@ -1,15 +1,19 @@
 import { Flex, ListIcon, ListItem, Text } from '@chakra-ui/react';
 import { Content } from '../types';
 import { FaHeart } from 'react-icons/fa';
-import React from 'react';
+import { memo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type ContentItemProps = {
   content: Content;
-  handleMoveToDetail: (id: string) => void;
 };
 
-function ContentItem({ content, handleMoveToDetail }: ContentItemProps) {
-  console.log('content', content.likes);
+const ContentItem = memo(({ content }: ContentItemProps) => {
+  const navigate = useNavigate();
+
+  const handleMoveToDetail = (id: string) => {
+    navigate(`/content/${id}`);
+  };
 
   return (
     <ListItem
@@ -26,6 +30,6 @@ function ContentItem({ content, handleMoveToDetail }: ContentItemProps) {
       </Flex>
     </ListItem>
   );
-}
+});
 
-export default React.memo(ContentItem);
+export default ContentItem;

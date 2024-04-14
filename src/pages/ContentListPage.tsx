@@ -7,8 +7,6 @@ import { getContentList } from '../apis/apis';
 import { useCallback } from 'react';
 
 function ContentListPage() {
-  const navigate = useNavigate();
-
   const { data, fetchNextPage, hasNextPage, isFetching } =
     useSuspenseInfiniteQuery({
       queryKey: ['contentList'],
@@ -23,19 +21,9 @@ function ContentListPage() {
     rootMargin: '200px',
   });
 
-  const handleMoveToDetail = useCallback(
-    (id: string) => {
-      navigate(`/content/${id}`);
-    },
-    [navigate]
-  );
-
   return (
     <VStack>
-      <ContentList
-        contentList={data?.pages.flat() || []}
-        handleMoveToDetail={handleMoveToDetail}
-      />
+      <ContentList contentList={data?.pages.flat() || []} />
 
       {hasNextPage && !isFetching && <Divider marginY={4} ref={observerRef} />}
     </VStack>

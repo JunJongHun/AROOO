@@ -4,18 +4,13 @@ import ContentItem from './ContentItem';
 
 type ContentListProps = {
   contentList: Content[];
-  handleMoveToDetail: (id: string) => void;
 };
 
-function ContentList({ contentList, handleMoveToDetail }: ContentListProps) {
+function ContentList({ contentList }: ContentListProps) {
   return (
     <List w={'100%'}>
       {contentList?.map((content) => (
-        <ContentItem
-          key={content.id}
-          content={content}
-          handleMoveToDetail={handleMoveToDetail}
-        />
+        <ContentItem key={content.id} content={content} />
       ))}
     </List>
   );
