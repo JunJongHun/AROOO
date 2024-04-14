@@ -21,8 +21,8 @@ const ContentList = () => {
     });
 
   const observerRef = useInfiniteScroll(fetchNextPage, {
-    rootMargin: '200px',
-    threshold: 0,
+    rootMargin: '200px', // 미리 로딩할 거리
+    threshold: 0, // 보이는 순간 로딩
   });
 
   return (
