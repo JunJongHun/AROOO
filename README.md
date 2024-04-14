@@ -76,7 +76,7 @@ npm run dev
  ┣ 📜types.ts
  ┗ 📜vite-env.d.ts
 ```
-
+---
 ### 요구사항 체크 리스트
 
 - [x] Api 서버로부터 콘텐츠 목록을 불러와 화면에 표시합니다.
@@ -91,13 +91,13 @@ npm run dev
 - [x] 콘텐츠 목록의 무한 스크롤 구현
 - [x] 비지니스 로직 추상화 처리
 - [ ] 비지니스 로직 테스트
-
+---
 ### 구현 내용
 - 컴포넌트 내 **비지니스 로직을 Custom Hook으로 추상화** 하여 **재사용성과 UI에 집중 할 수 있도록 분리**
-  - `useDataFetching` : 컴포넌트 내 API 요청 코드 작성 시, 중복 작성되는 state, useEffect를 줄이고 데이터 요청에 상태에 따른 state를 쉽게 관리
-  - `useContentList` : 콘텐츠 목록 무한스크롤을 구현하기 위해 다음 목록을 불러올 수 있는지 판단 가능한 hasNext를 포함한 필요한 상태 관리
+  - `useDataFetching` : 컴포넌트 내 API 요청 코드 작성 시, 중복 작성되는 state, useEffect를 줄이고 데이터 요청에 상태에 따른 state를 쉽게 관리 -> `useQuery`로 대체
+  - `useContentList` : 콘텐츠 목록 무한스크롤을 구현하기 위해 다음 목록을 불러올 수 있는지 판단 가능한 hasNext를 포함한 필요한 상태 관리 -> `useInfinitiQuery`로 대체
   - `useInfiniteScroll` : Intersection Observer API를 활용하여 특정 요소를 관찰 할 수 있고, 옵저버가 관찰하는 요소의 가시성 여부에 따라 callbalck 함수 실행 ( 무한스크롤 구현에 활용 )
-
+  -
 - MSW를 활용하여 Mock Sever를 구현 
 
 - **서버 부하를 고려하고 빠른 렌더링을 위한 React-Query 캐싱 기능 적용**
@@ -107,9 +107,10 @@ npm run dev
   - 콘텐츠 상세 페이지 좋아요 값 업데이트 성공 시, **콘텐츠 목록에 좋아요 값 동기화**
 
 - Suspense와 useSuspenseQuery를 사용해 사용자에게 예측 가능한 Skeleton UI를 보여줌으로써 렌더링 시간에 대한 체감 감소
+  - 무조건 Skeleton UI를 보여주는 것은 사용자 경험에 좋지 않을 수 있기에 응답 속도 0.3s 기준으로 렌더링 여부 결정
 
 - ErrorBoundary를 사용해 UI의 일부분에서 발생하는 자바스크립트 에러가 전체 애플리케이션 중지 하지 않도록 구현
-
+---
 ### 구현 화면
 
 #### Api 서버로부터 콘텐츠 목록을 불러오고 무한스크롤 적용
@@ -120,7 +121,7 @@ npm run dev
 
 #### 목록 내 아이템을 선택하면 콘텐츠 상세 페이지로 이동
 
-![아루2](https://github.com/JunJongHun/AROOO/assets/90402926/47c42d2a-c6ba-49a9-888c-c91d8c4876f7)
+![아루2](https://github.com/JunJongHun/AROOO/assets/90402926/bb8c3112-0ef5-4ff7-9793-a6d49e859865)
 ---
 
 #### 좋아요 버튼 클릭 시 API를 통해 서버에 값을 업데이트
