@@ -5,11 +5,24 @@ import {
   Skeleton,
   SkeletonCircle,
 } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 
 const SKELETON_COUNT = 10;
 const SKELETON_LIST = Array.from({ length: SKELETON_COUNT });
 
 const SkeletonContentList = () => {
+  const [isDeffered, setIsDeffered] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsDeffered(true);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!isDeffered) return null;
+
   return (
     <List w={'100%'}>
       {SKELETON_LIST.map((_, index) => (
