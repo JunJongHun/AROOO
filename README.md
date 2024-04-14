@@ -44,18 +44,22 @@ npm run dev
 ```bash
 📦src
  ┣ 📂apis
- ┃ ┣ 📜apis.ts
- ┃ ┗ 📜constants.ts
+ ┃ ┣ 📜config.ts
+ ┃ ┗ 📜contents.ts
  ┣ 📂assets
  ┃ ┗ 📜arooo.png
  ┣ 📂components
  ┃ ┣ 📜ContentItem.tsx
  ┃ ┣ 📜ContentList.tsx
- ┃ ┗ 📜Header.tsx
+ ┃ ┣ 📜Fallback.tsx
+ ┃ ┣ 📜Header.tsx
+ ┃ ┣ 📜QueryErrorBoundary.tsx
+ ┃ ┗ 📜SkeletonContentList.tsx
  ┣ 📂hooks
  ┃ ┣ 📜useContentList.tsx
  ┃ ┣ 📜useDataFetching.tsx
- ┃ ┗ 📜useInfiniteScroll.tsx
+ ┃ ┣ 📜useInfiniteScroll.tsx
+ ┃ ┗ 📜useLikeUp.tsx
  ┣ 📂mocks
  ┃ ┣ 📜browsers.ts
  ┃ ┣ 📜data.ts
@@ -67,6 +71,7 @@ npm run dev
  ┣ 📂styles
  ┃ ┗ 📜index.css
  ┣ 📜main.tsx
+ ┣ 📜queryClient.ts
  ┣ 📜router.tsx
  ┣ 📜types.ts
  ┗ 📜vite-env.d.ts
@@ -88,36 +93,49 @@ npm run dev
 - [ ] 비지니스 로직 테스트
 
 ### 구현 내용
-- 컴포넌트 내 비지니스 로직을 Custom Hook으로 추상화 하여 재사용성과 UI에 집중 할 수 있도록 분리
-  - useDataFetching : 컴포넌트 내 API 요청 코드 작성 시, 중복 작성되는 state, useEffect를 줄이고 데이터 요청에 상태에 따른 state를 쉽게 관리
-  - useContentList : 콘텐츠 목록 무한스크롤을 구현하기 위해 다음 목록을 불러올 수 있는지 판단 가능한 hasNext를 포함한 필요한 상태 관리
-  - useInfiniteScroll : Intersection Observer API를 활용하여 특정 요소를 관찰 할 수 있고, 옵저버가 관찰하는 요소의 가시성 여부에 따라 callbalck 함수 실행 ( 무한스크롤 구현에 활용 )
+- 컴포넌트 내 **비지니스 로직을 Custom Hook으로 추상화** 하여 **재사용성과 UI에 집중 할 수 있도록 분리**
+  - `useDataFetching` : 컴포넌트 내 API 요청 코드 작성 시, 중복 작성되는 state, useEffect를 줄이고 데이터 요청에 상태에 따른 state를 쉽게 관리
+  - `useContentList` : 콘텐츠 목록 무한스크롤을 구현하기 위해 다음 목록을 불러올 수 있는지 판단 가능한 hasNext를 포함한 필요한 상태 관리
+  - `useInfiniteScroll` : Intersection Observer API를 활용하여 특정 요소를 관찰 할 수 있고, 옵저버가 관찰하는 요소의 가시성 여부에 따라 callbalck 함수 실행 ( 무한스크롤 구현에 활용 )
 
 - MSW를 활용하여 Mock Sever를 구현 
 
-- 서버 부하를 줄이고 빠른 렌더링을 위한 React-Query 캐싱 기능 적용
+- **서버 부하를 고려하고 빠른 렌더링을 위한 React-Query 캐싱 기능 적용**
 
-- 좋아요 업데이트 시, Optimistic Update 적용하여 사용자 경험 개선 고려
-  - React-Query를 활용하여 좋아요 버튼 클릭시 캐싱된 값을 먼저 업데이트 하고 API 요청 실패 시, 이전 값으로 Rollback 구현
-  - 콘텐츠 상세 페이지 좋아요 값 업데이트 성공 시, 콘텐츠 목록에 좋아요 값 동기화
+- 좋아요 업데이트 시, **Optimistic Update 적용**하여 사용자 경험 개선 고려
+  - React-Query를 활용하여 좋아요 버튼 클릭시 캐싱된 값을 먼저 업데이트 하고 API 요청 실패 시, 이전 값으로 **Rollback** 구현
+  - 콘텐츠 상세 페이지 좋아요 값 업데이트 성공 시, **콘텐츠 목록에 좋아요 값 동기화**
 
+- Suspense와 useSuspenseQuery를 사용해 사용자에게 예측 가능한 Skeleton UI를 보여줌으로써 렌더링 시간에 대한 체감 감소
+
+- ErrorBoundary를 사용해 UI의 일부분에서 발생하는 자바스크립트 에러가 전체 애플리케이션 중지 하지 않도록 구현
 
 ### 구현 화면
 
-1.  Api 서버로부터 콘텐츠 목록을 불러와 화면에 표시합니다.
+#### Api 서버로부터 콘텐츠 목록을 불러오고 무한스크롤 적용
 
 ![아루1](https://github.com/JunJongHun/AROOO/assets/90402926/fd89547f-fde8-49bd-8db1-746b446ae55b)
+---
 
-  
-  
-2.  목록 내 아이템을 선택하면 콘텐츠 상세 페이지로 이동합니다.
+
+#### 목록 내 아이템을 선택하면 콘텐츠 상세 페이지로 이동
 
 ![아루2](https://github.com/JunJongHun/AROOO/assets/90402926/47c42d2a-c6ba-49a9-888c-c91d8c4876f7)
+---
 
-
-
-
-3.  좋아요 버튼 클릭 시 API를 통해 서버에 값을 업데이트 합니다.
-4.  상세 페이지 내에서의 좋아요 버튼 클릭 시 목록 내 아이템에도 좋아요 수 값이 업데이트가 되어야 합니다.
+#### 좋아요 버튼 클릭 시 API를 통해 서버에 값을 업데이트
+#### 상세 페이지 내에서의 좋아요 버튼 클릭 시 목록 내 아이템에도 좋아요 수 값이 업데이트
 
 ![아루3](https://github.com/JunJongHun/AROOO/assets/90402926/748faece-0751-415e-83d5-73c388e7059f)
+---
+
+#### Suspense 적용
+
+![아루5](https://github.com/JunJongHun/AROOO/assets/90402926/d19c8856-f7ed-4b78-b9a7-a23406b1fb9a)
+---
+
+#### ErrorBoundary 적용
+   
+![아루4](https://github.com/JunJongHun/AROOO/assets/90402926/dbae83ea-df99-43f3-8c7b-adf89e97bc34)
+---
+
