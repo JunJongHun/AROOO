@@ -1,0 +1,29 @@
+name: Execute CodeBuild
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  buildAndTest:
+    name: GithubAction
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: AWS 설정
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: CodeBuild 실행
+        uses: aws-actions/aws-codebuild-run-build@v1.0.13
+        with:
+          project-name: ${{ secrets.AWS_CODEBUILD_PROJECT_NAME }}
