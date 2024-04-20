@@ -11,13 +11,13 @@ phases:
   post_build:
     commands:
       # copy the contents of /build to S3
-      - aws s3 cp --recursive ./build s3://arooo-vite-react-deploy-s3-bucket/
+      - aws s3 cp --recursive ./dist s3://arooo-vite-react-deploy-s3-bucket/
       # set the cache-control headers for index.html to prevent
       # browser caching
-      - aws s3 cp --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./build/index.html s3://arooo-vite-react-deploy-s3-bucket/
+      - aws s3 cp --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./dist/index.html s3://arooo-vite-react-deploy-s3-bucket/
       # Invalidate the CloudFront cache
       - aws cloudfront  create-invalidation --distribution-id E33PEHWJIFQF6A --paths /*
 artifacts:
   files:
-    - 'build/*'
-    - 'build/**/*'
+    - 'dist/*'
+    - 'dist/**/*'
