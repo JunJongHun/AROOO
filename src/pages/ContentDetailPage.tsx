@@ -21,7 +21,7 @@ const ContentDetailPage = () => {
     useOptimisticLikeUpdate(contentId);
 
   return (
-    <Flex h={'100%'} flexDirection={'column'} padding={2}>
+    <Flex w={'100%'} h={'100%'} flexDirection={'column'} padding={2}>
       <Box>
         <Text fontSize={32}>{contentDetail?.title}</Text>
       </Box>

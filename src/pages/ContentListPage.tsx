@@ -7,7 +7,7 @@ import Fallback from '../components/Fallback';
 
 const ContentListPage = () => {
   return (
-    <VStack>
+    <VStack w="100%">
       <QueryErrorBoundary FallbackComponent={Fallback}>
         <Suspense fallback={<SkeletonContentList />}>
           <ContentList />
