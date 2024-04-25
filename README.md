@@ -1,7 +1,13 @@
-# AROOO 프론트엔드 과제
+# [아루] AROOO WEB 프론트엔드 과제
 ![image](https://github.com/JunJongHun/AROOO/assets/90402926/3930a48d-f3bf-4b26-aacb-e9a901fcb1a5)
 
-AROOO WEB 프론트엔드 과제 프로젝트 입니다.
+#### AROOO는 여성을 위한 웰니스 플랫폼 '자기만의방'을 만들고 있습니다.
+
+
+
+## 배포 환경 접속 방법
+URL : [배포 주소](https://d33bvz1hdswgqw.cloudfront.net)
+
 
 ## 개발 환경
 
@@ -26,7 +32,8 @@ npm install
 npm run dev
 ```
 
-기본 <http://localhost:5173> 로 접속
+### 개발 환경 접속 방법
+URL : <http://localhost:5173>
 
 ## 기술 스택
 
@@ -38,41 +45,71 @@ npm run dev
 - React Router Dom
 - MSW
 - Chakra UI
+- S3
+- CloudFront
+- Api Gateway
+- Lambda
+- DynamoDB
 
 ### 디렉토리 구조
+<details>
+<summary>📦 AROOO 프로젝트 구조</summary>
 
 ```bash
-📦src
- ┣ 📂apis
- ┃ ┣ 📜config.ts
- ┃ ┗ 📜contents.ts
- ┣ 📂assets
- ┃ ┗ 📜arooo.png
- ┣ 📂components
- ┃ ┣ 📜ContentItem.tsx
- ┃ ┣ 📜ContentList.tsx
- ┃ ┣ 📜Fallback.tsx
- ┃ ┣ 📜Header.tsx
- ┃ ┣ 📜HitAreaWrapper.tsx
- ┃ ┣ 📜QueryErrorBoundary.tsx
- ┃ ┗ 📜SkeletonContentList.tsx
- ┣ 📂hooks
- ┃ ┣ 📜useInfiniteScroll.tsx
- ┃ ┗ 📜useOptimisticLikeUpdate.tsx
- ┣ 📂mocks
- ┃ ┣ 📜browsers.ts
- ┃ ┣ 📜data.ts
- ┃ ┗ 📜handlers.ts
- ┣ 📂pages
- ┃ ┣ 📜ContentDetailPage.tsx
- ┃ ┣ 📜ContentListPage.tsx
- ┃ ┗ 📜RootLayout.tsx
- ┣ 📜main.tsx
- ┣ 📜queryClient.ts
- ┣ 📜router.tsx
- ┣ 📜types.ts
- ┗ 📜vite-env.d.ts
+📦AROOO
+ ┣ 📂.github
+ ┃ ┗ 📂workflows
+ ┃ ┃ ┗ 📜main.yaml
+ ┣ 📂public
+ ┃ ┣ 📜arooo_favicon.png
+ ┃ ┗ 📜mockServiceWorker.js
+ ┣ 📂src
+ ┃ ┣ 📂apis
+ ┃ ┃ ┣ 📜config.ts
+ ┃ ┃ ┗ 📜contents.ts
+ ┃ ┣ 📂assets
+ ┃ ┃ ┗ 📜arooo.png
+ ┃ ┣ 📂components
+ ┃ ┃ ┣ 📜ContentItem.tsx
+ ┃ ┃ ┣ 📜ContentList.tsx
+ ┃ ┃ ┣ 📜Fallback.tsx
+ ┃ ┃ ┣ 📜Header.tsx
+ ┃ ┃ ┣ 📜HitAreaWrapper.tsx
+ ┃ ┃ ┣ 📜QueryErrorBoundary.tsx
+ ┃ ┃ ┗ 📜SkeletonContentList.tsx
+ ┃ ┣ 📂hooks
+ ┃ ┃ ┣ 📜useInfiniteScroll.tsx
+ ┃ ┃ ┗ 📜useOptimisticLikeUpdate.tsx
+ ┃ ┣ 📂mocks
+ ┃ ┃ ┣ 📜browsers.ts
+ ┃ ┃ ┣ 📜data.ts
+ ┃ ┃ ┗ 📜handlers.ts
+ ┃ ┣ 📂pages
+ ┃ ┃ ┣ 📜ContentDetailPage.tsx
+ ┃ ┃ ┣ 📜ContentListPage.tsx
+ ┃ ┃ ┗ 📜RootLayout.tsx
+ ┃ ┣ 📂styles
+ ┃ ┃ ┗ 📜theme.ts
+ ┃ ┣ 📜main.tsx
+ ┃ ┣ 📜queryClient.ts
+ ┃ ┣ 📜router.tsx
+ ┃ ┣ 📜types.ts
+ ┃ ┗ 📜vite-env.d.ts
+ ┣ 📜.eslintrc.cjs
+ ┣ 📜.gitignore
+ ┣ 📜.gitmessage.txt
+ ┣ 📜README.md
+ ┣ 📜buildspec.yaml
+ ┣ 📜index.html
+ ┣ 📜package-lock.json
+ ┣ 📜package.json
+ ┣ 📜tsconfig.json
+ ┣ 📜tsconfig.node.json
+ ┗ 📜vite.config.ts
 ```
+
+</details>
+
 ---
 ### 요구사항 체크 리스트
 
@@ -111,6 +148,12 @@ npm run dev
   - 재사용 가능한 `<HitAreaWrapper/>` 구현
 
 - MSW를 활용하여 Mock Sever를 구현 
+
+- CloudFront + S3 이용한 배포
+
+- Github Actions 이용해 CD 적용
+
+- API 서버 Api Gateway + Lambda + DynamoDB 활용해 Serverless 아키텍처 구현
 
 ---
 ### 구현 화면
