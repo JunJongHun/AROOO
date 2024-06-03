@@ -6,7 +6,7 @@
 
 
 ## 배포 환경 접속 방법
-URL : [배포 주소](https://d33bvz1hdswgqw.cloudfront.net)
+[https://arooo.org](https://arooo.org/)
 
 
 ## 개발 환경
@@ -33,7 +33,7 @@ npm run dev
 ```
 
 ### 개발 환경 접속 방법
-URL : <http://localhost:5173>
+<http://localhost:5173>
 
 ## 기술 스택
 
